@@ -25,13 +25,29 @@ class InstagramStoryChecker:
         
         self.driver = webdriver.Firefox(options=options)
         self.wait = WebDriverWait(self.driver, 10)
-        
-    def login(self, username, password):
+
+    def load_credentials(self):
+        """Şifrelenmiş giriş bilgilerini yükler ve çözer"""
+        key = self.load_key()
+        f = Fernet(key)
+        with open("encrypted_credentials.txt", "rb") as enc_file:
+            encrypted_data = enc_file.read()
+        decrypted_data = f.decrypt(encrypted_data).decode()
+        username, password = decrypted_data.split(":")
+        return username, password
+
+    def load_key(self):
+        """Şifreleme anahtarını dosyadan okur"""
+        return open("secret.key", "rb").read()
+
+    def login(self):
         """Instagram'a giriş yapar"""
         try:
             if not self.driver:
                 self.setup_driver()
-                
+
+            username, password = self.load_credentials()
+
             self.driver.get("https://www.instagram.com/")
             time.sleep(2)  # Sayfanın yüklenmesi için bekle
             
@@ -53,9 +69,22 @@ class InstagramStoryChecker:
                 "button[type='submit']"
             )
             login_button.click()
-            
-            # Giriş başarılı mı kontrol et
+
+            # İki faktörlü kimlik doğrulama kontrolü
             time.sleep(5)  # Giriş işlemi için bekle
+            if "security code" in self.driver.page_source.lower():
+                code = input("Lütfen Instagram'dan gelen güvenlik kodunu girin: ")
+                code_input = self.wait.until(
+                    EC.presence_of_element_located((By.NAME, "verificationCode"))
+                )
+                code_input.send_keys(code)
+                confirm_button = self.driver.find_element(
+                    By.CSS_SELECTOR,
+                    "button[type='button']"
+                )
+                confirm_button.click()
+
+            # Giriş başarılı mı kontrol et
             self.wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "svg[aria-label='Home']"))
             )
