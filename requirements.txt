@@ -1,0 +1,4 @@
+selenium>=4.0.0
+winotify>=1.0.0
+cryptography>=3.0.0
+PyQt5>=5.15.0 

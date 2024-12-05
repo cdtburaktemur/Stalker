@@ -18,8 +18,13 @@ Instagram'da belirtilen kullanıcının hikayelerini otomatik olarak kontrol ede
 1. Gerekli Python paketlerini yükleyin:
 
 ```bash
-pip install selenium
+pip install selenium  # Tarayıcı otomasyonu için
+pip install winotify  # Windows bildirimleri için
+pip install cryptography  # Şifreleme için
+pip install PyQt5  # Kullanıcı arayüzü için
 ```
+
+Veya tek seferde:
 
 ```bash
 pip install selenium winotify cryptography PyQt5
@@ -29,6 +34,20 @@ pip install selenium winotify cryptography PyQt5
    - [Firefox'u buradan indirin](https://www.mozilla.org/firefox/new/)
    - [Geckodriver'ı buradan indirin](https://github.com/mozilla/geckodriver/releases)
    - Geckodriver'ı Python Scripts klasörüne kopyalayın
+
+## Gereksinimler
+
+- Python 3.x
+- Firefox tarayıcısı
+- Geckodriver
+- Windows işletim sistemi
+- İnternet bağlantısı
+
+### Python Paketleri
+- selenium>=4.0.0
+- winotify>=1.0.0
+- cryptography>=3.0.0
+- PyQt5>=5.15.0
 
 ## Kullanım
 
