@@ -1,159 +1,70 @@
-# Instagram Hikaye Takip Servisi
+# Instagram Hikaye Takipçisi
 
-Bu servis, belirtilen Instagram kullanıcısının hikayelerini otomatik olarak kontrol eder ve hikaye paylaşıldığında bildirim gönderir.
+Instagram'da belirtilen kullanıcının hikayelerini otomatik olarak kontrol eden ve yeni hikaye paylaşıldığında bildirim gönderen bir Python uygulaması.
 
-## Proje Dosyaları
+## Özellikler
 
-1. **instagram_story_checker.py**: Ana kontrol sınıfı
+- Instagram hesabına otomatik giriş
+- İki faktörlü doğrulama desteği
+- Belirli aralıklarla hikaye kontrolü (1-30 dakika arası ayarlanabilir)
+- Windows bildirim sistemi entegrasyonu
+- Sistem tepsisinde çalışabilme
+- Şifrelenmiş giriş bilgileri saklama
+- Görsel ilerleme çubuğu ve durum bildirimleri
+- Şifre görünürlük kontrolü
 
-   - Instagram'a giriş yapma
-   - Hikaye kontrolü
-   - Bildirim gönderme
-   - Tarayıcı yönetimi
-2. **instagram_story_service.py**: Windows servis yapılandırması
+## Kurulum
 
-   - Servis kurulumu ve yönetimi
-   - Arka plan çalışma mantığı
-   - Log yönetimi
-3. **story_checker_gui.py**: Kullanıcı arayüzü (opsiyonel)
+1. Gerekli Python paketlerini yükleyin:
 
-   - Giriş bilgileri formu
-   - Durum göstergesi
-   - Log görüntüleme
-4. **main.py**: GUI başlatıcı (opsiyonel)
+```bash
+pip install selenium
+```
 
-## Kurulum Adımları
+```bash
+pip install selenium winotify cryptography PyQt5
+```
 
-### 1. Gerekli Paketlerin Kurulumu
+2. Firefox ve Geckodriver'ı yükleyin:
+   - [Firefox'u buradan indirin](https://www.mozilla.org/firefox/new/)
+   - [Geckodriver'ı buradan indirin](https://github.com/mozilla/geckodriver/releases)
+   - Geckodriver'ı Python Scripts klasörüne kopyalayın
 
-bash
-pip install pywin32 selenium winotify
+## Kullanım
 
-### 2. Firefox ve Geckodriver Kurulumu
+1. Programı başlatın:
 
-- Firefox tarayıcısını yükleyin
-- [Geckodriver'ı indirin](https://github.com/mozilla/geckodriver/releases)
-- Geckodriver.exe dosyasını Python Scripts klasörüne kopyalayın:
+```bash
+python main.py 
+``` 
 
-C:\Users\[KullanıcıAdınız]\AppData\Local\Programs\Python\Python3x\Scripts
+2. Instagram giriş bilgilerinizi ve takip edilecek kullanıcı adını girin
+3. Kontrol aralığını seçin (1-30 dakika)
+4. "Takibi Başlat" butonuna tıklayın
 
-### 3. Servis Yapılandırması
+Program sistem tepsisinde çalışmaya devam edecek ve yeni hikaye paylaşıldığında bildirim gönderecektir.
 
-`instagram_story_service.py` dosyasında kullanıcı bilgilerini güncelleyin:
+## Güvenlik
 
-### 3. Servis Yapılandırması
+- Giriş bilgileri yerel olarak şifrelenerek saklanır
+- Şifreler açık metin olarak tutulmaz
+- İki faktörlü doğrulama desteklenir
 
-`instagram_story_service.py` dosyasında kullanıcı bilgilerini güncelleyin:
+## Notlar
 
-## Servis Kurulumu ve Yönetimi
+- Program çalışırken pencereyi kapatırsanız, sistem tepsisinde çalışmaya devam eder
+- Sistem tepsisi ikonuna çift tıklayarak pencereyi tekrar açabilirsiniz
+- "Takibi Durdur" butonu ile programı durdurabilirsiniz
 
-### Servis Kurulumu
+## Katkıda Bulunma
 
-PowerShell'i yönetici olarak açın ve şu komutları çalıştırın:
+1. Bu depoyu fork edin
+2. Yeni bir branch oluşturun (`git checkout -b feature/yeniOzellik`)
+3. Değişikliklerinizi commit edin (`git commit -am 'Yeni özellik eklendi'`)
+4. Branch'inizi push edin (`git push origin feature/yeniOzellik`)
+5. Pull Request oluşturun
 
+## Lisans
 
-### Servisi Yükleme
+Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
-powershell
-python instagram_story_service.py install
-
-### Servisi Başlatma
-
-powershell
-python instagram_story_service.py start
-
-### Servisi Durdurma
-
-powershell
-python instagram_story_service.py stop
-
-### Servisi Kaldırma
-
-powershell
-python instagram_story_service.py remove
-
-## Servis Özellikleri
-
-- Windows başlangıcında otomatik çalışır
-- Her dakika hikaye kontrolü yapar
-- Hikaye bulunduğunda:
-  - Windows bildirimi gönderir
-  - Kosmos vize sayfasını açar
-- Arka planda sessizce çalışır
-- Windows Olay Günlüğü'ne kayıt tutar
-
-## Log ve Durum Kontrolü
-
-### Windows Hizmetleri
-
-1. Windows + R tuşlarına basın
-2. `services.msc` yazıp Enter'a basın
-3. "Instagram Hikaye Takip Servisi"ni bulun
-
-### Olay Görüntüleyici
-
-1. Windows + R tuşlarına basın
-2. `eventvwr.msc` yazıp Enter'a basın
-3. Windows Günlükleri > Application altında logları görüntüleyin
-
-## Kod Detayları
-
-### instagram_story_checker.py
-
-python
-Ana kontrol sınıfı
-class InstagramStoryChecker:
-def init(self):
-self.driver = None
-self.wait = None
-self.logged_in = False
-
-### instagram_story_service.py
-
-python
-Windows servis sınıfı
-class InstagramStoryService(win32serviceutil.ServiceFramework):
-svc_name = "InstagramStoryService"
-svc_display_name = "Instagram Hikaye Takip Servisi"
-
-## Sorun Giderme
-
-### Servis Başlatma Sorunları
-
-- Kullanıcı bilgilerinin doğruluğunu kontrol edin
-- Firefox ve geckodriver kurulumunu kontrol edin
-- Windows Olay Görüntüleyici'den hata mesajlarını inceleyin
-
-### Bildirim Sorunları
-
-- Windows bildirim ayarlarını kontrol edin
-- Servisin çalıştığından emin olun
-- Olay Görüntüleyici'den logları kontrol edin
-
-### Bağlantı Sorunları
-
-- İnternet bağlantısını kontrol edin
-- Instagram'ın erişilebilir olduğunu doğrulayın
-- Proxy ayarlarını kontrol edin
-
-## Güvenlik Notları
-
-1. Kullanıcı bilgilerini güvenli bir şekilde saklayın
-2. Instagram'ın bot algılama sistemine yakalanmamak için:
-   - Çok sık kontrol yapmaktan kaçının
-   - IP değişikliklerinde dikkatli olun
-   - Şüpheli aktivitelerden kaçının
-
-## Teknik Gereksinimler
-
-- Python 3.x
-- Windows 10/11
-- Firefox tarayıcısı
-- Yönetici hakları (servis kurulumu için)
-- İnternet bağlantısı
-
-## Lisans ve Sorumluluk Reddi
-
-Bu yazılım eğitim amaçlıdır. Instagram'ın kullanım koşullarına ve politikalarına uygun kullanılmalıdır. Yazılımın kullanımından doğacak sorunlardan kullanıcı sorumludur.
-
-Bu README.md dosyası projenin tüm detaylarını, kurulum adımlarını, kullanım talimatlarını ve sorun giderme bilgilerini içermektedir.
